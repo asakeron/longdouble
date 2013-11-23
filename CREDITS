@@ -4,5 +4,9 @@ Credits
 longdouble is written by
  * Thomas Stephenson
  
-based on an implementation by
+based on an implementation of 106 bit precision floating points by
  * Robert P. Munafo
+ 
+which is released under the terms of the GNU General Public License. 
+Permission to release this derivative work under the LGPL was granted
+by the author.
