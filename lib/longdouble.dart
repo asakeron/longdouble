@@ -1,7 +1,23 @@
+//    This file is part of longdouble.
+//
+//    longdouble is free software: you can redistribute it and/or modify
+//    it under the terms of the Lesser GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    longdoulbe is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    Lesser GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with longdouble.  If not, see <http://www.gnu.org/licenses/>.
+
+
 library longdouble;
 
 import 'dart:math' as math;
-import 'math_ld.dart' as math_ld;
+import 'math.dart' as math_ld;
 
 part 'src/parse.dart';
 
@@ -26,7 +42,7 @@ part 'src/parse.dart';
   * is provided by the `longdouble.parse` method, for the purposes of constructing
   * accurate literal values.
   * 
-  * The implmentation in this module is taken argely from  
+  * The implmentation in this module is taken largely from  
   * Robert Munafo's implementation of quad precision doubles
   * http://mrob.com/pub/math/f161.html
   */
