@@ -2,8 +2,6 @@ name: longdouble
 version: 0.1.0
 author: Thomas Stephenson <ovangle@gmail.com>
 description: An implementation of a 106 bit floating point data type
-homepage: https://github.com/longdouble
-environment:
-  sdk: '>=0.8.7'
-dependencies:
+homepage: https://github.com/ovangle/longdouble
+dev_dependencies:
   unittest: any
