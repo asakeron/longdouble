@@ -23,10 +23,10 @@ library longdouble.math;
 import 'dart:math' as math;
 import 'package:longdouble/longdouble.dart';
 
-const longdouble PI = 
+const longdouble pi = 
     const longdouble(math.pi, 1.224646799353209e-16);
 
-const longdouble E =
+const longdouble e =
     const longdouble(math.e, 1.445646891729250158e-16);
 
 longdouble min(longdouble dd1, longdouble dd2) =>

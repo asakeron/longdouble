@@ -49,13 +49,13 @@ part 'src/parse.dart';
 
 class longdouble implements Comparable<longdouble>{
   
-  static const longdouble NAN =
+  static const longdouble nan =
       const longdouble(double.nan, double.nan);
   
-  static const longdouble INFINITY = 
+  static const longdouble infinity = 
       const longdouble(double.infinity, double.infinity);
   
-  static const longdouble NEGATIVE_INFINITY = 
+  static const longdouble negativeInfinity = 
       const longdouble(double.negativeInfinity, double.negativeInfinity);
   
   /**
@@ -183,12 +183,12 @@ class longdouble implements Comparable<longdouble>{
    */
   longdouble operator *(dynamic v) {
     if (v is num) {
-      if (isNaN || v.isNaN) return NAN; 
+      if (isNaN || v.isNaN) return nan; 
       if (isInfinite || v.isInfinite) {
         if (isNegative) {
-          return v.isNegative ? INFINITY : NEGATIVE_INFINITY;
+          return v.isNegative ? infinity : negativeInfinity;
         } else {
-          return v.isNegative ? NEGATIVE_INFINITY : INFINITY;
+          return v.isNegative ? negativeInfinity : infinity;
         }
       }
       var t0 = _multDoubles(hi, v.toDouble());
@@ -199,13 +199,13 @@ class longdouble implements Comparable<longdouble>{
       
       return _normalizeThree(t0.hi, t1.hi, t2);
     } else if (v is longdouble) {
-      if (isNaN || v.isNaN) return NAN; 
+      if (isNaN || v.isNaN) return nan; 
       if (isInfinite || v.isInfinite) {
-        if (isZero || v.isZero) return NAN;
+        if (isZero || v.isZero) return nan;
         if (isNegative) {
-          return v.isNegative ? INFINITY : NEGATIVE_INFINITY;
+          return v.isNegative ? infinity : negativeInfinity;
         } else {
-          return v.isNegative ? NEGATIVE_INFINITY : INFINITY;
+          return v.isNegative ? negativeInfinity : infinity;
         }
       }
       var multHiHi = _multDoubles(hi, v.hi);
@@ -229,20 +229,20 @@ class longdouble implements Comparable<longdouble>{
    */
   longdouble operator +(dynamic v) {
     if (v is num) {
-      if (isNaN || v.isNaN) return NAN; 
+      if (isNaN || v.isNaN) return nan; 
       if (isInfinite) {
         if (isNegative) {
           //-inf + inf == NaN
-          if (v.isInfinite && !v.isNegative) return NAN;
-          return NEGATIVE_INFINITY;
+          if (v.isInfinite && !v.isNegative) return nan;
+          return negativeInfinity;
         } else {
           //inf + (-inf) == NaN
-          if (v.isInfinite && v.isNegative) return NAN;
-          return INFINITY;
+          if (v.isInfinite && v.isNegative) return nan;
+          return infinity;
         }
       } else if (v.isInfinite) {
-        if (v.isNegative) return NEGATIVE_INFINITY;
-        return INFINITY;
+        if (v.isNegative) return negativeInfinity;
+        return infinity;
       }
       
       var t0 = _addDoubles(hi, v.toDouble());
@@ -250,20 +250,20 @@ class longdouble implements Comparable<longdouble>{
       
       return _normalizeThree(t0.hi, t1.hi, t1.lo);
     } else if (v is longdouble) {
-      if (isNaN || v.isNaN) return NAN; 
+      if (isNaN || v.isNaN) return nan; 
       if (isInfinite) {
         if (isNegative) {
           //-inf + inf == NaN
-          if (v.isInfinite && !v.isNegative) return NAN;
-          return NEGATIVE_INFINITY;
+          if (v.isInfinite && !v.isNegative) return nan;
+          return negativeInfinity;
         } else {
           //inf + (-inf) == NaN
-          if (v.isInfinite && v.isNegative) return NAN;
-          return INFINITY;
+          if (v.isInfinite && v.isNegative) return nan;
+          return infinity;
         }
       } else if (v.isInfinite) {
-        if (isNegative) return NEGATIVE_INFINITY;
-        return INFINITY;
+        if (isNegative) return negativeInfinity;
+        return infinity;
       }
       
       var t0 = _addDoubles(hi, v.hi);
@@ -284,38 +284,38 @@ class longdouble implements Comparable<longdouble>{
    */
   longdouble operator -(dynamic v) {
     if (v is num) {
-      if (isNaN || v.isNaN) return NAN;
+      if (isNaN || v.isNaN) return nan;
       if (isInfinite) {
         if (isNegative) {
           // -Inf - (-Inf)
-          if (v.isInfinite && v.isNegative) return NAN; 
-          return NEGATIVE_INFINITY;
+          if (v.isInfinite && v.isNegative) return nan; 
+          return negativeInfinity;
         } else {
           // Inf - Inf
-          if (v.isInfinite && !v.isNegative) return NAN;
-          return INFINITY;
+          if (v.isInfinite && !v.isNegative) return nan;
+          return infinity;
         }
       } else if (v.isInfinite) {
-        return v.isNegative ? INFINITY : NEGATIVE_INFINITY;
+        return v.isNegative ? infinity : negativeInfinity;
       }
       
       final t0 = _subtractDoubles(hi, v.toDouble());
       final t1 = _subtractDoubles(lo, t0.lo);
       return _normalizeThree(t0.hi, t1.hi, t1.lo);
     } else if (v is longdouble) {
-      if (isNaN || v.isNaN) return NAN;
+      if (isNaN || v.isNaN) return nan;
       if (isInfinite) {
         if (isNegative) {
           // -Inf - (-Inf)
-          if (v.isInfinite && v.isNegative) return NAN;
-          return NEGATIVE_INFINITY;
+          if (v.isInfinite && v.isNegative) return nan;
+          return negativeInfinity;
         } else {
           // Inf - Inf
-          if (v.isInfinite && !v.isNegative) return NAN; 
-          return INFINITY;
+          if (v.isInfinite && !v.isNegative) return nan; 
+          return infinity;
         }
       } else if (v.isInfinite) {
-        return v.isNegative ? INFINITY : NEGATIVE_INFINITY;
+        return v.isNegative ? infinity : negativeInfinity;
       }
       final t0 = _subtractDoubles(hi, v.hi);
       final d  = _subtractDoubles(lo, v.lo);
@@ -333,33 +333,33 @@ class longdouble implements Comparable<longdouble>{
   
   longdouble operator /(dynamic v) {
     if (v is num) {
-      if (isNaN || v.isNaN) return NAN;
+      if (isNaN || v.isNaN) return nan;
       if (isInfinite) {
-        if (v.isInfinite) return NAN;
+        if (v.isInfinite) return nan;
         if (isNegative) {
-          return v.isNegative ? INFINITY : NEGATIVE_INFINITY;
+          return v.isNegative ? infinity : negativeInfinity;
         } else {
-          return v.isNegative ? NEGATIVE_INFINITY : INFINITY;
+          return v.isNegative ? negativeInfinity : infinity;
         }
       } else if (v.isInfinite) {
         return new longdouble.zero();
       } else if (v == 0.0) {
-        return isNegative ? NEGATIVE_INFINITY : INFINITY;
+        return isNegative ? negativeInfinity : infinity;
       }
       return _longdouble_division(this, new longdouble(v.toDouble()));
     } else if (v is longdouble) {
-      if (isNaN || v.isNaN) return NAN;
+      if (isNaN || v.isNaN) return nan;
       if (isInfinite) {
-        if (v.isInfinite) return NAN;
+        if (v.isInfinite) return nan;
         if (isNegative) {
-          return v.isNegative ? INFINITY : NEGATIVE_INFINITY;
+          return v.isNegative ? infinity : negativeInfinity;
         } else {
-          return v.isNegative ? NEGATIVE_INFINITY : INFINITY;
+          return v.isNegative ? negativeInfinity : infinity;
         }
       } else if (v.isInfinite) {
         return new longdouble.zero();
       } else if (v == 0.0) {
-        return isNegative ? NEGATIVE_INFINITY : INFINITY;
+        return isNegative ? negativeInfinity : infinity;
       }
       return _longdouble_division(this, v);
     } else {

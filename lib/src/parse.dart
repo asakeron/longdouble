@@ -78,11 +78,11 @@ longdouble _parseLongdouble(String source, [longdouble onError(String source)?])
   source = source.trim();
   var match = _INF_REGEXP.matchAsPrefix(source);
   if (match != null) {
-    return source.startsWith('-') ? longdouble.NEGATIVE_INFINITY : longdouble.INFINITY;
+    return source.startsWith('-') ? longdouble.negativeInfinity : longdouble.infinity;
   }
   match = _NAN_REGEXP.matchAsPrefix(source);
   if (match != null) {
-    return longdouble.NAN;
+    return longdouble.nan;
   }
   match = _LD_REGEXP.matchAsPrefix(source);
   if (match == null) {

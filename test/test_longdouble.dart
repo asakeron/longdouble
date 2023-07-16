@@ -15,9 +15,9 @@ void testLongdouble() {
   final ldneg1 = new longdouble(-1.0);
   final ld2 = new longdouble(2.0);
   
-  final nan = longdouble.NAN;
-  final inf = longdouble.INFINITY;
-  final neg_inf = longdouble.NEGATIVE_INFINITY;
+  final nan = longdouble.nan;
+  final inf = longdouble.infinity;
+  final neg_inf = longdouble.negativeInfinity;
   
   
   
@@ -79,7 +79,7 @@ void testLongdouble() {
 void testLongdoubleParse() {
   group("parse", () {
     test("-Infinity", 
-        () => expect(longdouble.parse("-Infinity"), equals(-longdouble.INFINITY)));
+        () => expect(longdouble.parse("-Infinity"), equals(-longdouble.infinity)));
     test("NaN", () => expect(longdouble.parse("-NaN").isNaN, isTrue));
     test("\'0.34\'", () {
       expect(longdouble.parse("0.34"), equals(new longdouble(0.34, -2.4424906541753444e-17)));
