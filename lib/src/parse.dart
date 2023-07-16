@@ -23,12 +23,6 @@ const List<int> _EXP_SYMBOLS   = const[0x45,0x65] /* e|E */;
 const int _ZERO_SYMBOL = 0x30 /* 0 */;
 const int _NINE_SYMBOL = 0x39 /* 9 */;
 
-const String _STR_INFINITY = "Infinity";
-const String _STR_NAN = "NaN";
-
-//The maximum number of digits to print
-const int _MAX_PRINT_DIGITS = 32;
-
 final RegExp _LD_REGEXP = 
     new RegExp(r"(\+|-)?(\d*.)?\d+(e|E(\+|-)?\d+)?");
 final RegExp _INF_REGEXP = 
@@ -79,7 +73,7 @@ _digitValue(int rune) {
   return -1;
 }
 
-longdouble _parseLongdouble(String source, [longdouble onError(String source)]) {
+longdouble _parseLongdouble(String source, [longdouble onError(String source)?]) {
   //Remove leading and trailing whitespace chars.
   source = source.trim();
   var match = _INF_REGEXP.matchAsPrefix(source);
@@ -102,8 +96,8 @@ longdouble _parseLongdouble(String source, [longdouble onError(String source)]) 
   bool isExponentPositive = true;
   //The position of the decimal point, if one exists in the source.
   int pointPosition = -1;
-  List<int> significandDigits = new List<int>();
-  List<int> exponentDigits = new List<int>();
+  List<int> significandDigits = [];
+  List<int> exponentDigits = [];
   int i=0;
   for (var rune in source.runes) {
     i++;

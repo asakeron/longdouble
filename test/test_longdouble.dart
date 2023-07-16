@@ -1,6 +1,6 @@
 library test_longdouble;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:longdouble/longdouble.dart';
 
 void main() {

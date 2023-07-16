@@ -50,13 +50,13 @@ part 'src/parse.dart';
 class longdouble implements Comparable<longdouble>{
   
   static const longdouble NAN =
-      const longdouble(double.NAN, double.NAN);
+      const longdouble(double.nan, double.nan);
   
   static const longdouble INFINITY = 
-      const longdouble(double.INFINITY, double.INFINITY);
+      const longdouble(double.infinity, double.infinity);
   
   static const longdouble NEGATIVE_INFINITY = 
-      const longdouble(double.NEGATIVE_INFINITY, double.NEGATIVE_INFINITY);
+      const longdouble(double.negativeInfinity, double.negativeInfinity);
   
   /**
    * Parse [input] as a longdouble literal.
@@ -67,7 +67,7 @@ class longdouble implements Comparable<longdouble>{
    * Leading and trailing whitespace is ignored.
    */
   
-  static longdouble parse(String input, [longdouble onError(String input)]) =>
+  static longdouble parse(String input, [longdouble onError(String input)?]) =>
       _parseLongdouble(input, onError);
   
   final double hi;
@@ -479,7 +479,7 @@ longdouble _multDoubles(double a, double b) {
 /**
  * Add two [double] values, returning the addition as a normalized [longdouble].
  */
-longdouble _addDoubles(double a, double b, [double c = null]) {
+longdouble _addDoubles(double a, double b, [double? c]) {
   if (c == null) {
     //add_112
     final sum = a + b;
