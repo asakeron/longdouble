@@ -5,4 +5,5 @@ homepage: https://github.com/ovangle/longdouble
 environment:
   sdk: ">=2.12.0 <4.0.0"
 dev_dependencies:
-  test: any
+  lints: ^2.1.1
+  test: ^1.24.4
