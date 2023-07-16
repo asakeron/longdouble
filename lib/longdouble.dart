@@ -13,7 +13,6 @@
 //    You should have received a copy of the GNU General Public License
 //    along with longdouble.  If not, see <http://www.gnu.org/licenses/>.
 
-
 library longdouble;
 
 import 'dart:math' as math;
@@ -47,17 +46,15 @@ part 'src/parse.dart';
   * http://mrob.com/pub/math/f161.html
   */
 
-class longdouble implements Comparable<longdouble>{
-  
-  static const longdouble nan =
-      const longdouble(double.nan, double.nan);
-  
-  static const longdouble infinity = 
+class longdouble implements Comparable<longdouble> {
+  static const longdouble nan = const longdouble(double.nan, double.nan);
+
+  static const longdouble infinity =
       const longdouble(double.infinity, double.infinity);
-  
-  static const longdouble negativeInfinity = 
+
+  static const longdouble negativeInfinity =
       const longdouble(double.negativeInfinity, double.negativeInfinity);
-  
+
   /**
    * Parse [input] as a longdouble literal.
    * 
@@ -66,28 +63,28 @@ class longdouble implements Comparable<longdouble>{
    * 
    * Leading and trailing whitespace is ignored.
    */
-  
+
   static longdouble parse(String input, [longdouble onError(String input)?]) =>
       _parseLongdouble(input, onError);
-  
+
   final double hi;
   final double lo;
-  
+
   /**
    * Initialize a [longdouble] with the given [:hi:]
    * and [:lo:] double values.
    */
   const longdouble(double this.hi, [double this.lo = 0.0]);
-  
+
   const longdouble.zero() : this(0.0, 0.0);
-  
+
   /**
    * Return the value of `1.0 / this`. 
    * Since it's impossible to implement operators on double taking a left value of a [longdouble],
    * the only way to divide by a [longdouble] is to multiply by the reciprocal
    */
   longdouble get reciprocal => _longdouble_division(new longdouble(1.0), this);
-  
+
   /**
    * Retrieve the result as a double value
    */
@@ -97,7 +94,7 @@ class longdouble implements Comparable<longdouble>{
   bool get isNegative => hi.isNegative || hi == 0.0 && lo.isNegative;
   bool get isInfinite => hi.isInfinite || lo.isInfinite;
   bool get isZero => hi == 0.0 && lo == 0.0;
-  
+
   /**
    * Compares the longdouble to the num [:a:], 
    * returning a negative number if this is less than a, 
@@ -119,12 +116,12 @@ class longdouble implements Comparable<longdouble>{
       if (a.isNaN) return 0;
       return 1;
     }
-    if (a.isNaN) return -1; 
+    if (a.isNaN) return -1;
     var cmpHi = hi.compareTo(a);
     if (cmpHi != 0) return cmpHi;
     return lo.compareTo(0.0);
   }
-  
+
   /**
    * Compares the longdouble to the num [:a:], 
    * returning a negative number if this is less than a, 
@@ -150,7 +147,7 @@ class longdouble implements Comparable<longdouble>{
     if (cmpHi != 0) return cmpHi;
     return lo.compareTo(ld.lo);
   }
-  
+
   /**
    * The absolute value of `this`
    */
@@ -166,24 +163,24 @@ class longdouble implements Comparable<longdouble>{
       return this;
     }
   }
-  
+
   int floor() => toDouble().floor();
   double floorToDouble() => toDouble().floorToDouble();
-  
+
   int ceil() => toDouble().ceil();
   double ceilToDouble() => toDouble().ceilToDouble();
-  
+
   /**
    * Unary negation operator
    */
   longdouble operator -() => new longdouble(-hi, -lo);
-  
+
   /**
    * Multiply the value of `this` by the num or longdouble value [:v:].
    */
   longdouble operator *(dynamic v) {
     if (v is num) {
-      if (isNaN || v.isNaN) return nan; 
+      if (isNaN || v.isNaN) return nan;
       if (isInfinite || v.isInfinite) {
         if (isNegative) {
           return v.isNegative ? infinity : negativeInfinity;
@@ -192,14 +189,14 @@ class longdouble implements Comparable<longdouble>{
         }
       }
       var t0 = _multDoubles(hi, v.toDouble());
-      var d  = _multDoubles(lo, v.toDouble());
-      
+      var d = _multDoubles(lo, v.toDouble());
+
       var t1 = _addDoubles(t0.lo, d.hi);
       var t2 = d.lo + t1.lo;
-      
+
       return _normalizeThree(t0.hi, t1.hi, t2);
     } else if (v is longdouble) {
-      if (isNaN || v.isNaN) return nan; 
+      if (isNaN || v.isNaN) return nan;
       if (isInfinite || v.isInfinite) {
         if (isZero || v.isZero) return nan;
         if (isNegative) {
@@ -212,24 +209,25 @@ class longdouble implements Comparable<longdouble>{
       var multHiLo = _multDoubles(hi, v.lo);
       var multLoHi = _multDoubles(lo, v.hi);
       double multLoLo = lo * v.lo;
-      
+
       var t1 = _addDoubles(multHiHi.lo, multHiLo.hi, multLoHi.hi);
       var t2 = multHiLo.lo + multLoHi.lo + multLoLo + t1.lo;
-      
+
       return _normalizeThree(multHiHi.hi, t1.hi, t2);
     } else if (v == null) {
       throw new ArgumentError("right multiplicand null");
     } else {
-      throw new ArgumentError("right multiplicand of '*' must be a num or longdouble");
+      throw new ArgumentError(
+          "right multiplicand of '*' must be a num or longdouble");
     }
   }
-  
+
   /**
    * Add the value of `this` to the num or longdouble value [:v:].
    */
   longdouble operator +(dynamic v) {
     if (v is num) {
-      if (isNaN || v.isNaN) return nan; 
+      if (isNaN || v.isNaN) return nan;
       if (isInfinite) {
         if (isNegative) {
           //-inf + inf == NaN
@@ -244,13 +242,13 @@ class longdouble implements Comparable<longdouble>{
         if (v.isNegative) return negativeInfinity;
         return infinity;
       }
-      
+
       var t0 = _addDoubles(hi, v.toDouble());
       var t1 = _addDoubles(lo, t0.lo);
-      
+
       return _normalizeThree(t0.hi, t1.hi, t1.lo);
     } else if (v is longdouble) {
-      if (isNaN || v.isNaN) return nan; 
+      if (isNaN || v.isNaN) return nan;
       if (isInfinite) {
         if (isNegative) {
           //-inf + inf == NaN
@@ -265,20 +263,20 @@ class longdouble implements Comparable<longdouble>{
         if (isNegative) return negativeInfinity;
         return infinity;
       }
-      
+
       var t0 = _addDoubles(hi, v.hi);
-      var d  = _addDoubles(lo, v.lo);
+      var d = _addDoubles(lo, v.lo);
       var t1 = _addDoubles(t0.lo, d.hi);
       double t2 = d.lo + t1.lo;
-      
+
       return _normalizeThree(t0.hi, t1.hi, t2);
-    } else if (v == null) { 
+    } else if (v == null) {
       throw new ArgumentError("null summand");
     } else {
       throw new ArgumentError("right summand must be num or longdouble");
     }
   }
-  
+
   /**
    * Subtract the value of [:v:] from the value of `this`.
    */
@@ -288,7 +286,7 @@ class longdouble implements Comparable<longdouble>{
       if (isInfinite) {
         if (isNegative) {
           // -Inf - (-Inf)
-          if (v.isInfinite && v.isNegative) return nan; 
+          if (v.isInfinite && v.isNegative) return nan;
           return negativeInfinity;
         } else {
           // Inf - Inf
@@ -298,7 +296,7 @@ class longdouble implements Comparable<longdouble>{
       } else if (v.isInfinite) {
         return v.isNegative ? infinity : negativeInfinity;
       }
-      
+
       final t0 = _subtractDoubles(hi, v.toDouble());
       final t1 = _subtractDoubles(lo, t0.lo);
       return _normalizeThree(t0.hi, t1.hi, t1.lo);
@@ -311,18 +309,18 @@ class longdouble implements Comparable<longdouble>{
           return negativeInfinity;
         } else {
           // Inf - Inf
-          if (v.isInfinite && !v.isNegative) return nan; 
+          if (v.isInfinite && !v.isNegative) return nan;
           return infinity;
         }
       } else if (v.isInfinite) {
         return v.isNegative ? infinity : negativeInfinity;
       }
       final t0 = _subtractDoubles(hi, v.hi);
-      final d  = _subtractDoubles(lo, v.lo);
-    
+      final d = _subtractDoubles(lo, v.lo);
+
       final t1 = _addDoubles(t0.lo, d.hi);
       double t2 = d.lo + t1.lo;
-      
+
       return _normalizeThree(t0.hi, t1.hi, t2);
     } else if (v == null) {
       throw new ArgumentError("null subtrahend");
@@ -330,7 +328,7 @@ class longdouble implements Comparable<longdouble>{
       throw new ArgumentError("subtrahend must be num or longdouble");
     }
   }
-  
+
   longdouble operator /(dynamic v) {
     if (v is num) {
       if (isNaN || v.isNaN) return nan;
@@ -366,18 +364,17 @@ class longdouble implements Comparable<longdouble>{
       throw new ArgumentError("right operand of '/' must be num or longdouble");
     }
   }
-  
+
   /**
    * Test whether `this` is numerically equal to [:o:].
    */
   bool operator ==(Object o) {
     if (o is num) {
       if (isZero && o == 0.0) return true;
-      if (isNaN || o.isNaN) return false; 
+      if (isNaN || o.isNaN) return false;
       return compareToNum(o) == 0;
     } else if (o is longdouble) {
-      
-      if (isNaN || o.isNaN) return false; 
+      if (isNaN || o.isNaN) return false;
       if (isInfinite) {
         if (!isNegative) {
           return o.isInfinite && !o.isNegative;
@@ -387,26 +384,26 @@ class longdouble implements Comparable<longdouble>{
       }
       var n1 = _normalizeTwo(hi, lo);
       var n2 = _normalizeTwo(o.hi, o.lo);
-      return n1.hi == n2.hi && n1.lo == n2.lo; 
+      return n1.hi == n2.hi && n1.lo == n2.lo;
     }
     return false;
   }
-  
-  bool operator >(dynamic v) => 
-      (v is num && compareToNum(v) > 0)
-      || (v is longdouble && compareTo(v) > 0);
-  bool operator >=(dynamic v) => 
-      (v is num && compareToNum(v) >= 0)
-      || (v is longdouble && compareTo(v) >= 0);
-  bool operator <(dynamic v) => 
-      (v is num && compareToNum(v) < 0)
-      || (v is longdouble && compareTo(v) < 0);
-  bool operator <=(dynamic v) => 
-      (v is num && compareToNum(v) <= 0)
-      || (v is longdouble && compareTo(v) <= 0);
-  
+
+  bool operator >(dynamic v) =>
+      (v is num && compareToNum(v) > 0) ||
+      (v is longdouble && compareTo(v) > 0);
+  bool operator >=(dynamic v) =>
+      (v is num && compareToNum(v) >= 0) ||
+      (v is longdouble && compareTo(v) >= 0);
+  bool operator <(dynamic v) =>
+      (v is num && compareToNum(v) < 0) ||
+      (v is longdouble && compareTo(v) < 0);
+  bool operator <=(dynamic v) =>
+      (v is num && compareToNum(v) <= 0) ||
+      (v is longdouble && compareTo(v) <= 0);
+
   int get hashCode => 17 * hi.hashCode + lo.hashCode;
-  
+
   /**
    * A [String] representation of the double value.
    * 
@@ -415,7 +412,6 @@ class longdouble implements Comparable<longdouble>{
    * an error and produce unintuitive results.
    */
   String toString() => "longdouble($hi|$lo)";
-  
 }
 
 /**
@@ -469,10 +465,8 @@ longdouble _multDoubles(double a, double b) {
   //split both the doubles
   longdouble sa = _split(a);
   longdouble sb = _split(b);
-  final newLo = 
-      ((sa.hi * sb.hi - newHi) 
-        + (sa.hi * sb.lo) + (sb.hi * sa.lo)) 
-              + sa.lo * sb.lo;
+  final newLo = ((sa.hi * sb.hi - newHi) + (sa.hi * sb.lo) + (sb.hi * sa.lo)) +
+      sa.lo * sb.lo;
   return new longdouble(newHi, newLo);
 }
 
@@ -510,13 +504,13 @@ longdouble _subtractDoubles(double a, double b) {
  */
 longdouble _longdouble_division(longdouble a, longdouble b) {
   final initApprox = a.hi / b.hi;
-  
+
   var result = b * initApprox;
   final s = _subtractDoubles(a.hi, result.hi);
   var slo = s.lo;
   slo -= result.lo;
   slo += a.lo;
   var newApprox = (s.hi + slo) / b.hi;
-  
+
   return _normalizeTwo(initApprox, newApprox);
 }
